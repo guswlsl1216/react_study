@@ -1,25 +1,53 @@
 import { use, useState } from 'react'
 import './App.css'
 import Detail from './Detail'; // 경로 잘 잡아서 import도 해줘야함 
+import App2 from './App2';
+
+
+
 
 function App() {
   // const [변수명, 변경함수] = useState(초기값); => state 선언 방법 
   // useXXX : 리액트 내장함수 ( 리액트 훅 )
     const [title, setTitle] = useState('상품목록');
+
+    const [board, setBoard] = useState ([
+      {
+        title : 'React',
+        date : '2025-07-17',
+        like : 0
+      },
+      
+      {
+        title : 'HTML',
+        date : '2025-07-17',
+        like : 0
+      },
+
+      {
+        title : 'CSS',
+        date : '2025-07-17',
+        like : 0
+      },
+      
+    ]);
+
     const [boardTitle, setBoardTitle]   // state는 값만 저장할 수 있는게 아니라 값, 배열, 오브젝트 등 다양한 구조 넣을 수 있음  
                           = useState(['React', 'HTML', 'CSS']);
     const [like, setLike]  = useState([ 0, 0, 0]);    // 좋아요 누를 때 숫자 올라가는거 // 초기 값 0으로 설정 
     const [show, setshow] = useState(false); // 감추려고 만든 변수임 , 'show'라는 State를 보관할 변수 (처음 페이지를 들어갔을 때 안보이게 하려고 false로 )
     const [titleIndex, setTitleIndex] = useState(0);  // 몇번째 게시글을 클릭했는지 저장할 변수를 만들어서 datail에 보내줘서 iddex 활용 (똑같은 제목만 나올 때 )
-
-let arr = [1,2,3,4,5];
+    const [newTitle, setNewTitle] = useState('');      // 새로운 글 작성 제목을 기억하는 스테이트
+   
+    let arr = [1,2,3,4,5];
 
     function change (){
       setLike(like + 1);        // 함수로 만들어서 그냥 빼줌, like 초기 값 + 1로 설정해 줘야함 ! 
     };
 
   return (                 // 배열도 {} 안에 작성해 줘야함, data는 작명 
-    <div className='App'>   
+    <div className='App'>  
+    <App2/>
 
         {/* {
           arr.map ( (data)  => {
@@ -56,7 +84,24 @@ let arr = [1,2,3,4,5];
               setLike(_like);             // 주소값이 같기 때문에 setLike를 써도 감지 못함. 배열을 깨고 다시 새 배열을 만들어야함!ㅃ 
             }}>좋아요</button> {like[i]} </h4>
           <p>2025-07-16</p>
+
+          
+{/* 보드 지우는 작업 */}  
+            <button onClick= { () => {
+            let _boardTitle = [...boardTitle];  
+             _boardTitle.splice(i,1);
+             setBoardTitle(_boardTitle);
+
+
+           let _like = [...like];
+            _like.splice(i,1);
+            setLike(_like);
+
+            }}>삭제</button>
+
         </div>
+
+
 
          )   
         })
@@ -99,8 +144,40 @@ let arr = [1,2,3,4,5];
       }
      
       {/* 컴포넌트 : 태그들을 모으는 컴포넌트를 만들 수 있음, 태그처럼 불러올 수 있음 , 여러번 불러올 수도 있음  */}
+
+          
+          <input type='text' value={newTitle} onInput= {(e) =>  {
+            setNewTitle(e.target.value);
+    
+          }}/>
+          <button onClick={ () => {
+
+            
+            if(  newTitle === '' ) {
+              alert('제목을 입력하셔야 합니다.');
+              return;
+            }
+
+            let _boardTitle = [...boardTitle];  
+            _boardTitle.push(newTitle);
+
+            setBoardTitle(_boardTitle)
+
+
+
+           let _like = [...like];
+           _like.push(0);
+           setLike(_like);
+           setNewTitle('');
+          
+
+          }}>글작성</button>
+
+        {/* input에 a를 입력함 */}  
       
+      {/* 자식도 같이 랜더링 댐  */}
     </div>
+
   )
   
 }
